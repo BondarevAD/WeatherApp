@@ -18,8 +18,8 @@ struct ContentView: View {
 //    @State var coordinates:(lat: Double, lon: Double) = (0,0)
     
     var body: some View {
-        Text("Hello")
-        }
+        Text("d")
+    }
 //        .onAppear{
 //            observeCoordinatesUpdates()
 //            observeLocationAccessDenied()

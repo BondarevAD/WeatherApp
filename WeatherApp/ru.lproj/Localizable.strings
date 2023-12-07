@@ -1,0 +1,9 @@
+/* 
+  Localizable.strings
+  WeatherApp
+
+  Created by User on 7.12.23.
+  
+*/
+"settings_language" = "Язык";
+"settings_language_footer" = "Выберите язык интерфейса.";

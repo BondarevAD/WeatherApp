@@ -14,6 +14,9 @@
 		CE0E4EB82B22035A001586DB /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0E4EB72B22035A001586DB /* Persistence.swift */; };
 		CE0E4EBB2B22035A001586DB /* WeatherApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE0E4EB92B22035A001586DB /* WeatherApp.xcdatamodeld */; };
 		CE7DD2C42B22127400585F32 /* DeviceLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7DD2C32B22127400585F32 /* DeviceLocationService.swift */; };
+		CE7DD2C72B221EBA00585F32 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CE7DD2C92B221EBA00585F32 /* Localizable.strings */; };
+		CED3E9E22B2230A70010894E /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED3E9E12B2230A70010894E /* Language.swift */; };
+		CED3E9E42B2231AE0010894E /* LocalizationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED3E9E32B2231AE0010894E /* LocalizationService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +29,10 @@
 		CE0E4EBA2B22035A001586DB /* WeatherApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WeatherApp.xcdatamodel; sourceTree = "<group>"; };
 		CE0E4EC12B220712001586DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		CE7DD2C32B22127400585F32 /* DeviceLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceLocationService.swift; sourceTree = "<group>"; };
+		CE7DD2C82B221EBA00585F32 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CE7DD2CA2B221EBD00585F32 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CED3E9E12B2230A70010894E /* Language.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Language.swift; sourceTree = "<group>"; };
+		CED3E9E32B2231AE0010894E /* LocalizationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +73,9 @@
 				CE0E4EB92B22035A001586DB /* WeatherApp.xcdatamodeld */,
 				CE0E4EB42B22035A001586DB /* Preview Content */,
 				CE7DD2C32B22127400585F32 /* DeviceLocationService.swift */,
+				CE7DD2C92B221EBA00585F32 /* Localizable.strings */,
+				CED3E9E12B2230A70010894E /* Language.swift */,
+				CED3E9E32B2231AE0010894E /* LocalizationService.swift */,
 			);
 			path = WeatherApp;
 			sourceTree = "<group>";
@@ -120,6 +130,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = CE0E4EA22B220355001586DB;
 			productRefGroup = CE0E4EAC2B220356001586DB /* Products */;
@@ -137,6 +148,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE0E4EB62B22035A001586DB /* Preview Assets.xcassets in Resources */,
+				CE7DD2C72B221EBA00585F32 /* Localizable.strings in Resources */,
 				CE0E4EB32B22035A001586DB /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -148,15 +160,29 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CED3E9E42B2231AE0010894E /* LocalizationService.swift in Sources */,
 				CE7DD2C42B22127400585F32 /* DeviceLocationService.swift in Sources */,
 				CE0E4EBB2B22035A001586DB /* WeatherApp.xcdatamodeld in Sources */,
 				CE0E4EB82B22035A001586DB /* Persistence.swift in Sources */,
+				CED3E9E22B2230A70010894E /* Language.swift in Sources */,
 				CE0E4EB12B220356001586DB /* ContentView.swift in Sources */,
 				CE0E4EAF2B220356001586DB /* WeatherAppApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		CE7DD2C92B221EBA00585F32 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CE7DD2C82B221EBA00585F32 /* en */,
+				CE7DD2CA2B221EBD00585F32 /* ru */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		CE0E4EBC2B22035A001586DB /* Debug */ = {
