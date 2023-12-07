@@ -13,6 +13,7 @@
 		CE0E4EB62B22035A001586DB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE0E4EB52B22035A001586DB /* Preview Assets.xcassets */; };
 		CE0E4EB82B22035A001586DB /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0E4EB72B22035A001586DB /* Persistence.swift */; };
 		CE0E4EBB2B22035A001586DB /* WeatherApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE0E4EB92B22035A001586DB /* WeatherApp.xcdatamodeld */; };
+		CE7DD2C42B22127400585F32 /* DeviceLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7DD2C32B22127400585F32 /* DeviceLocationService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +24,8 @@
 		CE0E4EB52B22035A001586DB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		CE0E4EB72B22035A001586DB /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		CE0E4EBA2B22035A001586DB /* WeatherApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WeatherApp.xcdatamodel; sourceTree = "<group>"; };
+		CE0E4EC12B220712001586DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		CE7DD2C32B22127400585F32 /* DeviceLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceLocationService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,12 +58,14 @@
 		CE0E4EAD2B220356001586DB /* WeatherApp */ = {
 			isa = PBXGroup;
 			children = (
+				CE0E4EC12B220712001586DB /* Info.plist */,
 				CE0E4EAE2B220356001586DB /* WeatherAppApp.swift */,
 				CE0E4EB02B220356001586DB /* ContentView.swift */,
 				CE0E4EB22B22035A001586DB /* Assets.xcassets */,
 				CE0E4EB72B22035A001586DB /* Persistence.swift */,
 				CE0E4EB92B22035A001586DB /* WeatherApp.xcdatamodeld */,
 				CE0E4EB42B22035A001586DB /* Preview Content */,
+				CE7DD2C32B22127400585F32 /* DeviceLocationService.swift */,
 			);
 			path = WeatherApp;
 			sourceTree = "<group>";
@@ -143,6 +148,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE7DD2C42B22127400585F32 /* DeviceLocationService.swift in Sources */,
 				CE0E4EBB2B22035A001586DB /* WeatherApp.xcdatamodeld in Sources */,
 				CE0E4EB82B22035A001586DB /* Persistence.swift in Sources */,
 				CE0E4EB12B220356001586DB /* ContentView.swift in Sources */,
@@ -277,7 +283,9 @@
 				DEVELOPMENT_ASSET_PATHS = "\"WeatherApp/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WeatherApp/Info.plist;
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "This app uses your location for your app experience";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app uses your location for your app experience";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -306,7 +314,9 @@
 				DEVELOPMENT_ASSET_PATHS = "\"WeatherApp/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WeatherApp/Info.plist;
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "This app uses your location for your app experience";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app uses your location for your app experience";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
