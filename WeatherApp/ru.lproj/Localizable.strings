@@ -7,4 +7,4 @@
 */
 "settings_language" = "Язык";
 "settings_language_footer" = "Выберите язык интерфейса.";
-"City" = "Город";
+"city" = "Город";

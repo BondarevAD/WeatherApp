@@ -20,10 +20,14 @@ struct ContentView: View {
     @State var tokens: Set<AnyCancellable> = []
     @State var coordinates:(lat: Double, lon: Double) = (0,0)
     
+    @State var networkMonitor = NetworkMonitor()
+    
+    @AppStorage("language")
+    private var language = LocalizationService.shared.language
+    
     
     
     var body: some View {
-        
         
         VStack{
             if(viewModel.weather?.name == nil || viewModel.weatherForHours?.message == nil
@@ -112,7 +116,7 @@ struct ContentView: View {
                             }
                         }
                     }
-                    .searchable(text: $searchText, prompt: "City")
+                .searchable(text: $searchText, prompt: "city".localized(language))
                     .onSubmit(of: .search) {
                         Task{
                             await viewModel.searchWeather(for: searchText)

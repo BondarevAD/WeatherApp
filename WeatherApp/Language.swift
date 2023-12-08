@@ -10,7 +10,18 @@ import Foundation
 enum Language: String{
     case russian = "ru"
     case english = "en"
+    
+    var userSymbol: String {
+        switch self {
+        case .english:
+            return "gb"
+        default:
+            return rawValue
+        }
+        }
 }
+
+
 
 
 extension String {

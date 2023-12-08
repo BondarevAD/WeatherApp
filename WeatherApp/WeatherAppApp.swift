@@ -9,13 +9,22 @@ import SwiftUI
 import CoreLocation
 
 @main
-struct WeatherAppApp: App {
-    let persistenceController = PersistenceController.shared
+struct WeatherAppApp: App {    
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            TabView {
+                ContentView()
+                    .tabItem {
+                        Image(systemName: "sun.max.fill")
+                            .foregroundColor(.blue)
+                    }
+                SettingsView()
+                    .tabItem{
+                        Image(systemName: "gearshape.fill")
+                            .foregroundColor(.blue)
+                    }
+            }
         }
     }
 }
