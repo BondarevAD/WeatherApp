@@ -20,7 +20,7 @@ struct Welcome: Codable {
     let sys: Sys
     let timezone, id: Int
     let name: String
-    let cod: Int
+    let cod: Int?
 }
 
 // MARK: - Clouds
@@ -64,7 +64,11 @@ struct Weather: Codable {
 
 // MARK: - Wind
 struct Wind: Codable {
-    let speed: Double
-    let deg: Int
-    let gust: Double
+    let speed: Double?
+    let deg: Int?
+    let gust: Double?
+}
+
+struct SearchError: Codable {
+    let cod, message: String
 }

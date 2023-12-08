@@ -12,10 +12,14 @@ class WeatherViewModel: ObservableObject {
     public static let apiKey = "18c116696f2d0dd430a18ed1393b1019"
     
     @Published var weather: Welcome?
+    @Published var weatherForHours: WelcomeForHours?
+    @Published var weatherForWeek: WelcomeForWeeks?
+    @Published var searchedWeather: Welcome?
+    @Published var searchError: SearchError?
     
     var language: Language
     
-    func loadWeather(for coordinates:(lat: Double, lon: Double)) async  {
+    @MainActor func loadWeather(for coordinates:(lat: Double, lon: Double)) async  {
         let url = URL(string: "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinates.lat)&lon=\(coordinates.lon)&appid=\(WeatherViewModel.apiKey)&units=metric")!
         print(url)
             do {
@@ -27,6 +31,61 @@ class WeatherViewModel: ObservableObject {
                 print(error)
             }
     }
+    
+    @MainActor func loadWeatherForHours(for coordinates:(lat: Double, lon: Double)) async  {
+        let url = URL(string: "https://api.openweathermap.org/data/2.5/forecast?lat=\(coordinates.lat)&lon=\(coordinates.lon)&appid=\(WeatherViewModel.apiKey)&units=metric")!
+            do {
+                let (data, _) = try await URLSession.shared.data(from: url)
+                let weatherForHours = try JSONDecoder().decode(WelcomeForHours.self, from: data)
+                self.weatherForHours = weatherForHours
+                print(weatherForHours)
+            } catch {
+                print(error)
+            }
+    }
+    
+    @MainActor func searchWeather(for searchCity: String) async {
+        let url = URL(string: "https://api.openweathermap.org/data/2.5/weather?q=\(searchCity)&appid=\(WeatherViewModel.apiKey)&units=metric")!
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let weather = try JSONDecoder().decode(Welcome.self, from: data)
+            self.searchedWeather = weather
+            self.searchError = nil
+            print(weather)
+        } catch {
+            print(error)
+            do{
+                let (data, _) = try await URLSession.shared.data(from: url)
+                let error = try JSONDecoder().decode(SearchError.self, from: data)
+                self.searchError = error
+                self.searchedWeather = nil
+            }
+            catch{
+                print(error)
+            }
+        }
+    }
+        
+        @MainActor func loadWeatherForWeek(for coordinates:(lat: Double, lon: Double)) async  {
+            let url = URL(string: "https://api.openweathermap.org/data/2.5/onecall?lat=\(coordinates.lat)&lon=\(coordinates.lon)&appid=\(WeatherViewModel.apiKey)&units=metric")!
+            print(url)
+                do {
+                    let (data, _) = try await URLSession.shared.data(from: url)
+                    let weatherForWeek = try JSONDecoder().decode(WelcomeForWeeks.self, from: data)
+                    self.weatherForWeek = weatherForWeek
+                    print(weatherForWeek)
+                } catch {
+                    print(error)
+                }
+        }
+    
+    func clearSearch() {
+        self.searchedWeather = nil
+        self.searchError = nil
+    }
+        
+    
+    
     
     init(language: Language) {
         self.language = language

@@ -12,7 +12,7 @@ struct WelcomeForHours: Codable {
     let cod: String
     let message, cnt: Int
     let list: [List]
-    let city: City
+    let city: City?
 }
 
 // MARK: - City
@@ -26,8 +26,8 @@ struct City: Codable {
 
 
 // MARK: - List
-struct List: Codable {
-    let dt: Int
+struct List: Codable, Identifiable {
+    let id: Int
     let main: MainClass
     let weather: [Weather]
     let clouds: Clouds
@@ -39,14 +39,15 @@ struct List: Codable {
     let rain, snow: Rain?
 
     enum CodingKeys: String, CodingKey {
-        case dt, main, weather, clouds, wind, visibility, pop, sys
+        case main, weather, clouds, wind, visibility, pop, sys
         case dtTxt = "dt_txt"
+        case id = "dt"
         case rain, snow
     }
 }
 
 // MARK: - MainClass
-struct MainClass: Codable {
+struct MainClass: Codable{
     let temp, feelsLike, tempMin, tempMax: Double
     let pressure, seaLevel, grndLevel, humidity: Int
     let tempKf: Double
