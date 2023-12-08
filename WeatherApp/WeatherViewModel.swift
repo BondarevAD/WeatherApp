@@ -20,38 +20,56 @@ class WeatherViewModel: ObservableObject {
     var language: Language
     
     @MainActor func loadWeather(for coordinates:(lat: Double, lon: Double)) async  {
-        let url = URL(string: "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinates.lat)&lon=\(coordinates.lon)&appid=\(WeatherViewModel.apiKey)&units=metric")!
-        print(url)
+        let url: URL
+        if(language.rawValue == "ru"){
+            url = URL(string: "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinates.lat)&lon=\(coordinates.lon)&appid=\(WeatherViewModel.apiKey)&units=metric&lang=ru")!
+        }
+        else{
+            url = URL(string: "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinates.lat)&lon=\(coordinates.lon)&appid=\(WeatherViewModel.apiKey)&units=imperial")!
+        }
             do {
                 let (data, _) = try await URLSession.shared.data(from: url)
                 let weather = try JSONDecoder().decode(Welcome.self, from: data)
                 self.weather = weather
-                print(weather)
+//                print(weather)
             } catch {
                 print(error)
             }
     }
     
     @MainActor func loadWeatherForHours(for coordinates:(lat: Double, lon: Double)) async  {
-        let url = URL(string: "https://api.openweathermap.org/data/2.5/forecast?lat=\(coordinates.lat)&lon=\(coordinates.lon)&appid=\(WeatherViewModel.apiKey)&units=metric")!
+        
+        let url: URL
+        if(language.rawValue == "ru"){
+            url = URL(string: "https://api.openweathermap.org/data/2.5/forecast?lat=\(coordinates.lat)&lon=\(coordinates.lon)&appid=\(WeatherViewModel.apiKey)&units=metric&lang=ru")!
+        }
+        else{
+            url = URL(string: "https://api.openweathermap.org/data/2.5/forecast?lat=\(coordinates.lat)&lon=\(coordinates.lon)&appid=\(WeatherViewModel.apiKey)&units=imperial")!
+        }
             do {
                 let (data, _) = try await URLSession.shared.data(from: url)
                 let weatherForHours = try JSONDecoder().decode(WelcomeForHours.self, from: data)
                 self.weatherForHours = weatherForHours
-                print(weatherForHours)
+//                print(weatherForHours)
             } catch {
                 print(error)
             }
     }
     
     @MainActor func searchWeather(for searchCity: String) async {
-        let url = URL(string: "https://api.openweathermap.org/data/2.5/weather?q=\(searchCity)&appid=\(WeatherViewModel.apiKey)&units=metric")!
+        let url: URL
+        if(language.rawValue == "ru"){
+            url = URL(string: "https://api.openweathermap.org/data/2.5/weather?q=\(searchCity)&appid=\(WeatherViewModel.apiKey)&lang=ru&units=metric")!
+        }
+        else{
+            url = URL(string: "https://api.openweathermap.org/data/2.5/weather?q=\(searchCity)&appid=\(WeatherViewModel.apiKey)&units=imperial")!
+        }
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             let weather = try JSONDecoder().decode(Welcome.self, from: data)
             self.searchedWeather = weather
             self.searchError = nil
-            print(weather)
+//            print(weather)
         } catch {
             print(error)
             do{
@@ -67,13 +85,18 @@ class WeatherViewModel: ObservableObject {
     }
         
         @MainActor func loadWeatherForWeek(for coordinates:(lat: Double, lon: Double)) async  {
-            let url = URL(string: "https://api.openweathermap.org/data/2.5/onecall?lat=\(coordinates.lat)&lon=\(coordinates.lon)&appid=\(WeatherViewModel.apiKey)&units=metric")!
-            print(url)
+            let url: URL
+            if(language.rawValue == "ru"){
+                url = URL(string: "https://api.openweathermap.org/data/2.5/onecall?lat=\(coordinates.lat)&lon=\(coordinates.lon)&appid=\(WeatherViewModel.apiKey)&units=metric&lang=ru")!
+            }
+            else{
+                url = URL(string: "https://api.openweathermap.org/data/2.5/onecall?lat=\(coordinates.lat)&lon=\(coordinates.lon)&appid=\(WeatherViewModel.apiKey)&units=imperial")!
+            }
                 do {
                     let (data, _) = try await URLSession.shared.data(from: url)
                     let weatherForWeek = try JSONDecoder().decode(WelcomeForWeeks.self, from: data)
                     self.weatherForWeek = weatherForWeek
-                    print(weatherForWeek)
+//                    print(weatherForWeek)
                 } catch {
                     print(error)
                 }
@@ -82,6 +105,10 @@ class WeatherViewModel: ObservableObject {
     func clearSearch() {
         self.searchedWeather = nil
         self.searchError = nil
+    }
+    
+    func updateLanguage(language: Language) {
+        self.language = language
     }
         
     

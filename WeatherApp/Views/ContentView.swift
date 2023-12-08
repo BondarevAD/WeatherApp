@@ -14,7 +14,6 @@ struct ContentView: View {
     @StateObject var viewModel = WeatherViewModel(language: LocalizationService.shared.language)
     @State var searchText = ""
     
-    
     @StateObject var deviceLocationService = DeviceLocationService.shared
     
     @State var tokens: Set<AnyCancellable> = []
@@ -24,9 +23,7 @@ struct ContentView: View {
     
     @AppStorage("language")
     private var language = LocalizationService.shared.language
-    
-    
-    
+
     var body: some View {
         
         VStack{
@@ -67,12 +64,21 @@ struct ContentView: View {
                                     }
                                     .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 10))
                                 }
-                                
-                                Text("\(String(format: "%.0f", viewModel.weather!.main.temp))°")
-                                    .font(.system(size: 100))
-                                    .frame(
-                                        alignment: .center
-                                    )
+                                if(language.rawValue == "ru"){
+                                    Text("\(String(format: "%.0f", viewModel.weather!.main.temp))°")
+                                    
+                                        .font(.system(size: 100))
+                                        .frame(
+                                            alignment: .center
+                                        )
+                                }else {
+                                    Text("\(String(format: "%.0f", viewModel.weather!.main.temp))F")
+                                    
+                                        .font(.system(size: 100))
+                                        .frame(
+                                            alignment: .center
+                                        )
+                                }
                                 Rectangle().fill(Color.gray).frame(maxWidth:.infinity,
                                                                    maxHeight: 1,
                                                                    alignment: .center).padding()
@@ -80,7 +86,7 @@ struct ContentView: View {
                                 ScrollView(.horizontal, showsIndicators: false){
                                     HStack{
                                         ForEach(viewModel.weatherForHours!.list[0...6]) {weather in
-                                            WeatherForHourCard(list: weather)
+                                            WeatherForHourCard(list: weather, language: language)
                                         }
                                     }
                                 }
@@ -90,7 +96,7 @@ struct ContentView: View {
                                 ScrollView(.vertical){
                                     VStack{
                                         ForEach(viewModel.weatherForWeek!.daily) {weather in
-                                            WeatherForWeekCard(weather: weather)
+                                            WeatherForWeekCard(weather: weather, language: language)
                                         }
                                     }
                                 }
@@ -110,7 +116,7 @@ struct ContentView: View {
                                             .font(.system(size: 40))
                                     }
                                     else{
-                                        SearchWeatherView(weather: viewModel.searchedWeather!)
+                                        SearchWeatherView(weather: viewModel.searchedWeather!, language: language)
                                     }
                                 }
                             }
@@ -139,13 +145,12 @@ struct ContentView: View {
                 observeCoordinatesUpdates()
                 observeLocationAccessDenied()
                 deviceLocationService.requestLocationUpdates()
+                addLanguageObserver()
                 Task{
                     await viewModel.loadWeather(for:coordinates)
                     await viewModel.loadWeatherForHours(for: self.coordinates)
                     await viewModel.loadWeatherForWeek(for: self.coordinates)
                 }
-                
-                
             }
             
         }
@@ -166,7 +171,6 @@ struct ContentView: View {
                     await viewModel.loadWeatherForHours(for: self.coordinates)
                     await viewModel.loadWeatherForWeek(for: self.coordinates)
                 }
-                
             }
             .store(in: &tokens)
     }
@@ -178,6 +182,28 @@ struct ContentView: View {
             }
             .store(in: &tokens)
     }
+    func addLanguageObserver() {
+        NotificationCenter
+          .default
+          .publisher(for: LocalizationService.changedLanguage)
+          .sink { completion in
+              if case .failure(let error) = completion {
+                  print(error)
+                }
+          }receiveValue: { language in
+              print(LocalizationService.shared.language)
+              viewModel.updateLanguage(language: LocalizationService.shared.language)
+              
+              Task{
+                  await viewModel.loadWeather(for:self.coordinates)
+                  await viewModel.loadWeatherForHours(for: self.coordinates)
+                  await viewModel.loadWeatherForWeek(for: self.coordinates)
+              }
+          }
+              .store(in: &tokens)
+    }
+    
+    
 }
 
 

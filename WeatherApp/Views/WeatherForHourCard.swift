@@ -10,6 +10,7 @@ import SwiftUI
 struct WeatherForHourCard: View {
     
     var list: List
+    var language:Language
     
     var body: some View {
         VStack{
@@ -25,8 +26,13 @@ struct WeatherForHourCard: View {
             } placeholder: {
                 ProgressView()
             }
-            
-            Text("\((String(format: "%.0f",list.main.temp)))°")
+            if(language.rawValue == "ru") {
+                Text("\((String(format: "%.0f",list.main.temp)))°")
+            }
+            else {
+                Text("\((String(format: "%.0f",list.main.temp)))F")
+
+            }
         }
         .padding(.all)
         .overlay(

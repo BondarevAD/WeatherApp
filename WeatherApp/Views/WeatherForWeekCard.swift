@@ -10,6 +10,7 @@ import SwiftUI
 struct WeatherForWeekCard: View {
     
     var weather: Daily?
+    var language: Language
     
     var body: some View {
         HStack{
@@ -27,7 +28,13 @@ struct WeatherForWeekCard: View {
                 ProgressView()
             }
             Spacer()
-            Text("\(String(format: "%.0f",weather!.temp.day))°")
+            if(language.rawValue == "ru") {
+                Text("\(String(format: "%.0f",weather!.temp.day))°")
+            }
+            else {
+                Text("\(String(format: "%.0f",weather!.temp.day))F")
+
+            }
             Spacer()
             
         }

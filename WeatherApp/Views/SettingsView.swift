@@ -14,7 +14,6 @@ struct SettingsView: View {
     @AppStorage("language")
     private var language = LocalizationService.shared.language
     
-    
     var body: some View {
         VStack(alignment: .leading) {
             HStack {

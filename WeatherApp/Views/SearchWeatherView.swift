@@ -10,6 +10,7 @@ import SwiftUI
 struct SearchWeatherView: View {
     
     var weather: Welcome
+    var language: Language
     
     var body: some View {
         VStack{
@@ -24,8 +25,14 @@ struct SearchWeatherView: View {
                 } placeholder: {
                     ProgressView()
                 }
-                Text("\(String(format: "%2f", weather.main.temp))°")
-                    .font(.system(size: 30))
+                if(language.rawValue == "ru"){
+                    Text("\(String(format: "%.0f", weather.main.temp))°")
+                        .font(.system(size: 30))
+                }
+                else {
+                    Text("\(String(format: "%.0f", weather.main.temp))F")
+                        .font(.system(size: 30))
+                }
             }
             Text(weather.name)
                 .font(.system(size: 50))

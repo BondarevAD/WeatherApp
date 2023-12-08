@@ -29,6 +29,8 @@ class ViewModelList: ObservableObject {
             
                let viewModels = [WeatherViewModel(language: strongSelf.language),
                                 WeatherViewModel(language: strongSelf.language)]
+            
+            
                
                 DispatchQueue.main.async {
                     strongSelf.viewModels = viewModels
