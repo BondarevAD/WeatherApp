@@ -23,89 +23,47 @@ struct ContentView: View {
     
     @AppStorage("language")
     private var language = LocalizationService.shared.language
+    
+    @EnvironmentObject var cache: Cache
 
     var body: some View {
         
         VStack{
-            if(viewModel.weather?.name == nil || viewModel.weatherForHours?.message == nil
-               || viewModel.weatherForWeek?.timezone == nil
-            ) {
-                ProgressView()
-                    .frame(
-                        maxWidth: .infinity,
-                        maxHeight: .infinity
-                    )
+            if(networkMonitor.isConnected == false) {
+                if(cache.cachedData?.weather == nil) {
+                    Text("no internet")
+                }
+                else {
+                    Text(cache.cachedData!.weather!.name)
+                }
             }
-            else{
-                VStack{
-                    NavigationStack{
-                        
-                        if(viewModel.searchedWeather?.name == nil || searchText == "")  {
-                            
-                            ScrollView(.vertical) {
-                                HStack{
-                                    AsyncImage(url:
-                                                URL(string: "https://openweathermap.org/img/wn/\(viewModel.weather!.weather[0].icon)@2x.png")!
-                                    ) { image in
-                                        image
-                                            .resizable()
-                                            .scaledToFill()
-                                            .frame(width: 70, height: 70)
-                                    } placeholder: {
-                                        ProgressView()
-                                    }
-                                    VStack{
-                                        Text(viewModel.weather?.name ?? "None")
-                                            .font(.system(size: 50))
-                                        
-                                            .fontWeight(.bold)
-                                        
-                                        Text(viewModel.weather?.weather[0].description ?? "")
-                                    }
-                                    .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 10))
-                                }
-                                if(language.rawValue == "ru"){
-                                    Text("\(String(format: "%.0f", viewModel.weather!.main.temp))°")
-                                    
-                                        .font(.system(size: 100))
-                                        .frame(
-                                            alignment: .center
-                                        )
-                                }else {
-                                    Text("\(String(format: "%.0f", viewModel.weather!.main.temp))F")
-                                    
-                                        .font(.system(size: 100))
-                                        .frame(
-                                            alignment: .center
-                                        )
-                                }
-                                Rectangle().fill(Color.gray).frame(maxWidth:.infinity,
-                                                                   maxHeight: 1,
-                                                                   alignment: .center).padding()
-                                
-                                ScrollView(.horizontal, showsIndicators: false){
-                                    HStack{
-                                        ForEach(viewModel.weatherForHours!.list[0...6]) {weather in
-                                            WeatherForHourCard(list: weather, language: language)
-                                        }
-                                    }
-                                }
-                                .padding(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))
-                                
-                                
+            else {
+                if(viewModel.weather?.name == nil || viewModel.weatherForHours?.message == nil
+                   || viewModel.weatherForWeek?.timezone == nil
+                ) {
+                    ProgressView()
+                        .frame(
+                            maxWidth: .infinity,
+                            maxHeight: .infinity
+                        )
+                }
+                else{
+                    VStack{
+                        NavigationStack{
+                            if(viewModel.searchedWeather?.name == nil || searchText == "")  {
                                 ScrollView(.vertical){
                                     VStack{
-                                        ForEach(viewModel.weatherForWeek!.daily) {weather in
-                                            WeatherForWeekCard(weather: weather, language: language)
-                                        }
+                                        
+                                        WeatherForCityView(weather: viewModel.weather!, language: language)
+                                        
+                                        WeatherForHoursView(weather: viewModel.weatherForHours!, language: language)
+                                        
+                                        WeatherForWeekView(weather: viewModel.weatherForWeek!, language: language)
+                                        
+                                        Spacer()
                                     }
                                 }
-                                
-                                .padding(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))
-                                
-                                Spacer()
                             }
-                        }
                             else {
                                 if(viewModel.searchError?.message == nil && viewModel.searchedWeather?.name == nil) {
                                     ProgressView()
@@ -122,7 +80,7 @@ struct ContentView: View {
                             }
                         }
                     }
-                .searchable(text: $searchText, prompt: "city".localized(language))
+                    .searchable(text: $searchText, prompt: "city".localized(language))
                     .onSubmit(of: .search) {
                         Task{
                             await viewModel.searchWeather(for: searchText)
@@ -135,25 +93,32 @@ struct ContentView: View {
                         
                     }
                 }
-                    
+                
                 
                 
                 Spacer()
-            
-        }
-            .onAppear {
-                observeCoordinatesUpdates()
-                observeLocationAccessDenied()
-                deviceLocationService.requestLocationUpdates()
-                addLanguageObserver()
-                Task{
-                    await viewModel.loadWeather(for:coordinates)
-                    await viewModel.loadWeatherForHours(for: self.coordinates)
-                    await viewModel.loadWeatherForWeek(for: self.coordinates)
-                }
+                
             }
-            
         }
+                .onAppear {
+                    observeCoordinatesUpdates()
+                    observeLocationAccessDenied()
+                    deviceLocationService.requestLocationUpdates()
+                    addLanguageObserver()
+                    Task{
+                        await viewModel.loadWeather(for:coordinates)
+                        await viewModel.loadWeatherForHours(for: self.coordinates)
+                        await viewModel.loadWeatherForWeek(for: self.coordinates)
+                        if(viewModel.weather != nil)  {
+                            var cachedWeather = CachedWeather(weather: viewModel.weather ?? nil, weatherForHours: viewModel.weatherForHours ?? nil, weatherForWeeks: viewModel.weatherForWeek ?? nil, date: Date())
+                            self.cache.update(cachedWeather)
+                        }
+                    }
+                    
+                }
+            
+        
+    }
         
 
     
@@ -170,7 +135,12 @@ struct ContentView: View {
                     await viewModel.loadWeather(for:self.coordinates)
                     await viewModel.loadWeatherForHours(for: self.coordinates)
                     await viewModel.loadWeatherForWeek(for: self.coordinates)
+                    if(viewModel.weather != nil)  {
+                        var cachedWeather = CachedWeather(weather: viewModel.weather ?? nil, weatherForHours: viewModel.weatherForHours ?? nil, weatherForWeeks: viewModel.weatherForWeek ?? nil, date: Date())
+                        self.cache.update(cachedWeather)
+                    }
                 }
+                
             }
             .store(in: &tokens)
     }
@@ -198,7 +168,12 @@ struct ContentView: View {
                   await viewModel.loadWeather(for:self.coordinates)
                   await viewModel.loadWeatherForHours(for: self.coordinates)
                   await viewModel.loadWeatherForWeek(for: self.coordinates)
+                  if(viewModel.weather != nil)  {
+                      var cachedWeather = CachedWeather(weather: viewModel.weather ?? nil, weatherForHours: viewModel.weatherForHours ?? nil, weatherForWeeks: viewModel.weatherForWeek ?? nil, date: Date())
+                      self.cache.update(cachedWeather)
+                  }
               }
+             
           }
               .store(in: &tokens)
     }

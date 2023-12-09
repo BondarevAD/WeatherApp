@@ -9,7 +9,9 @@ import SwiftUI
 import CoreLocation
 
 @main
-struct WeatherAppApp: App {    
+struct WeatherAppApp: App {
+    
+    @StateObject var cache = Cache()
 
     var body: some Scene {
         WindowGroup {
@@ -25,6 +27,7 @@ struct WeatherAppApp: App {
                             .foregroundColor(.blue)
                     }
             }
+            .environmentObject(cache)
         }
     }
 }

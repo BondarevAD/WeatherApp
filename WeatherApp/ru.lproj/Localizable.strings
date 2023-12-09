@@ -8,3 +8,4 @@
 "settings_language" = "Язык";
 "settings_language_footer" = "Выберите язык интерфейса.";
 "city" = "Город";
+"no internet" = "Нет интернета";
