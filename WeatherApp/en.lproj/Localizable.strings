@@ -8,4 +8,9 @@
 "settings_language" = "Language";
 "settings_language_footer" = "Choose interface language.";
 "city" = "City";
-"no internet" = "No internet";
+"no internet" = "You need internet connection for first start";
+"no internet warning" = "You have no internet connection. Last update was:";
+"ago" = "ago";
+"m" = "m";
+"h" = "h";
+"d" = "d";

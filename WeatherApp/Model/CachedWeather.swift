@@ -12,6 +12,9 @@ struct CachedWeather: Codable {
     let weather: Welcome?
     let weatherForHours: WelcomeForHours?
     let weatherForWeeks: WelcomeForWeeks?
+    
+    let language:Language
+    
     let date: Date
     
 }

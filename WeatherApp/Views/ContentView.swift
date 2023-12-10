@@ -11,7 +11,8 @@ import CoreLocation
 
 
 struct ContentView: View {
-    @StateObject var viewModel = WeatherViewModel(language: LocalizationService.shared.language)
+    @StateObject var viewModelRu = WeatherViewModel(language: Language(rawValue: "ru")!)
+    @StateObject var viewModelEn = WeatherViewModel(language: Language(rawValue: "en")!)
     @State var searchText = ""
     
     @StateObject var deviceLocationService = DeviceLocationService.shared
@@ -30,16 +31,35 @@ struct ContentView: View {
         
         VStack{
             if(networkMonitor.isConnected == false) {
-                if(cache.cachedData?.weather == nil) {
+                if(cache.cachedDataRu?.weather == nil) {
                     Text("no internet")
                 }
                 else {
-                    Text(cache.cachedData!.weather!.name)
+                    VStack{
+                        
+                        Text("\("no internet warning".localized(language)) \(getDateDiffrence(date: cache.cachedDataRu!.date)) \("ago".localized(language))")
+                        
+                        
+                        if(language.rawValue == "ru") {
+                            WeatherForCityView(weather: cache.cachedDataRu!.weather!, language: language)
+                            
+                            WeatherForHoursView(weather: cache.cachedDataRu!.weatherForHours!, language: language)
+                            
+                            WeatherForWeekView(weather: cache.cachedDataRu!.weatherForWeeks!, language: language)
+                        }
+                        else {
+                            WeatherForCityView(weather: cache.cachedDataEn!.weather!, language: language)
+                            
+                            WeatherForHoursView(weather: cache.cachedDataEn!.weatherForHours!, language: language)
+                            
+                            WeatherForWeekView(weather: cache.cachedDataEn!.weatherForWeeks!, language: language)
+                        }
+                    }
                 }
             }
             else {
-                if(viewModel.weather?.name == nil || viewModel.weatherForHours?.message == nil
-                   || viewModel.weatherForWeek?.timezone == nil
+                if(viewModelRu.weather?.name == nil || viewModelRu.weatherForHours?.message == nil
+                   || viewModelRu.weatherForWeek?.timezone == nil
                 ) {
                     ProgressView()
                         .frame(
@@ -48,50 +68,88 @@ struct ContentView: View {
                         )
                 }
                 else{
-                    VStack{
-                        NavigationStack{
-                            if(viewModel.searchedWeather?.name == nil || searchText == "")  {
-                                ScrollView(.vertical){
-                                    VStack{
-                                        
-                                        WeatherForCityView(weather: viewModel.weather!, language: language)
-                                        
-                                        WeatherForHoursView(weather: viewModel.weatherForHours!, language: language)
-                                        
-                                        WeatherForWeekView(weather: viewModel.weatherForWeek!, language: language)
-                                        
-                                        Spacer()
-                                    }
+                    if(language.rawValue == "ru") {
+                        VStack{
+                            NavigationStack{
+                                if(viewModelRu.searchedWeather?.name == nil || searchText == "")  {
+                                    WeatherView(viewModel: viewModelRu, language: language)
                                 }
-                            }
-                            else {
-                                if(viewModel.searchError?.message == nil && viewModel.searchedWeather?.name == nil) {
-                                    ProgressView()
-                                }
-                                else{
-                                    if(viewModel.searchError?.message != nil) {
-                                        Text("City not founded.")
-                                            .font(.system(size: 40))
+                                else {
+                                    if(viewModelRu.searchError?.message == nil && viewModelRu.searchedWeather?.name == nil) {
+                                        ProgressView()
                                     }
                                     else{
-                                        SearchWeatherView(weather: viewModel.searchedWeather!, language: language)
+                                        if(viewModelRu.searchError?.message != nil) {
+                                            Text("City not founded.")
+                                                .font(.system(size: 40))
+                                        }
+                                        else{
+                                            SearchWeatherView(weather: viewModelRu.searchedWeather!, language: language)
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                    .searchable(text: $searchText, prompt: "city".localized(language))
-                    .onSubmit(of: .search) {
-                        Task{
-                            await viewModel.searchWeather(for: searchText)
+                        .searchable(text: $searchText, prompt: "city".localized(language))
+                        .onSubmit(of: .search) {
+                            Task{
+                                if(language.rawValue == "ru") {
+                                    await viewModelRu.searchWeather(for: searchText)
+                                }
+                                else {
+                                    await viewModelEn.searchWeather(for: searchText)
+                                }
+                            }
+                        }
+                        .onChange(of: searchText) { newValue in
+                            if(newValue.count == 0) {
+                                viewModelEn.clearSearch()
+                                viewModelRu.clearSearch()
+                            }
                         }
                     }
-                    .onChange(of: searchText) { newValue in
-                        if(newValue.count == 0) {
-                            viewModel.clearSearch()
+                    else {
+                        VStack{
+                            NavigationStack{
+                                if(viewModelEn.searchedWeather?.name == nil || searchText == "")  {
+                                    WeatherView(viewModel: viewModelEn, language: language)
+                                }
+                                else {
+                                    if(viewModelEn.searchError?.message == nil && viewModelEn.searchedWeather?.name == nil) {
+                                        ProgressView()
+                                    }
+                                    else{
+                                        if(viewModelEn.searchError?.message != nil) {
+                                            Text("City not founded.")
+                                                .font(.system(size: 40))
+                                        }
+                                        else{
+                                            SearchWeatherView(weather: viewModelEn.searchedWeather!, language: language)
+                                        }
+                                    }
+                                }
+                            }
                         }
+                        .searchable(text: $searchText, prompt: "city".localized(language))
+                        .onSubmit(of: .search) {
+                            Task{
+                                if(language.rawValue == "ru") {
+                                    await viewModelRu.searchWeather(for: searchText)
+                                }
+                                else {
+                                    await viewModelEn.searchWeather(for: searchText)
+                                }
+                            }
+                        }
+                        .onChange(of: searchText) { newValue in
+                            if(newValue.count == 0) {
+                                viewModelEn.clearSearch()
+                                viewModelRu.clearSearch()
+                            }
+                        }
+                    }
                         
-                    }
+                    
                 }
                 
                 
@@ -106,11 +164,18 @@ struct ContentView: View {
                     deviceLocationService.requestLocationUpdates()
                     addLanguageObserver()
                     Task{
-                        await viewModel.loadWeather(for:coordinates)
-                        await viewModel.loadWeatherForHours(for: self.coordinates)
-                        await viewModel.loadWeatherForWeek(for: self.coordinates)
-                        if(viewModel.weather != nil)  {
-                            var cachedWeather = CachedWeather(weather: viewModel.weather ?? nil, weatherForHours: viewModel.weatherForHours ?? nil, weatherForWeeks: viewModel.weatherForWeek ?? nil, date: Date())
+                        await viewModelRu.loadWeather(for:coordinates)
+                        await viewModelRu.loadWeatherForHours(for: self.coordinates)
+                        await viewModelRu.loadWeatherForWeek(for: self.coordinates)
+                        await viewModelEn.loadWeather(for:coordinates)
+                        await viewModelEn.loadWeatherForHours(for: self.coordinates)
+                        await viewModelEn.loadWeatherForWeek(for: self.coordinates)
+                        if(viewModelRu.weather != nil)  {
+                            var cachedWeather = CachedWeather(weather: viewModelRu.weather ?? nil, weatherForHours: viewModelRu.weatherForHours ?? nil, weatherForWeeks: viewModelRu.weatherForWeek ?? nil, language: Language(rawValue: "ru")!, date: Date())
+                            self.cache.update(cachedWeather)
+                        }
+                        if(viewModelEn.weather != nil)  {
+                            var cachedWeather = CachedWeather(weather: viewModelEn.weather ?? nil, weatherForHours: viewModelEn.weatherForHours ?? nil, weatherForWeeks: viewModelEn.weatherForWeek ?? nil, language: Language(rawValue: "en")!, date: Date())
                             self.cache.update(cachedWeather)
                         }
                     }
@@ -132,11 +197,18 @@ struct ContentView: View {
             }receiveValue: { coordinates in
                 self.coordinates = (coordinates.latitude, coordinates.longitude)
                 Task{
-                    await viewModel.loadWeather(for:self.coordinates)
-                    await viewModel.loadWeatherForHours(for: self.coordinates)
-                    await viewModel.loadWeatherForWeek(for: self.coordinates)
-                    if(viewModel.weather != nil)  {
-                        var cachedWeather = CachedWeather(weather: viewModel.weather ?? nil, weatherForHours: viewModel.weatherForHours ?? nil, weatherForWeeks: viewModel.weatherForWeek ?? nil, date: Date())
+                    await viewModelRu.loadWeather(for:self.coordinates)
+                    await viewModelRu.loadWeatherForHours(for: self.coordinates)
+                    await viewModelRu.loadWeatherForWeek(for: self.coordinates)
+                    await viewModelEn.loadWeather(for:self.coordinates)
+                    await viewModelEn.loadWeatherForHours(for: self.coordinates)
+                    await viewModelEn.loadWeatherForWeek(for: self.coordinates)
+                    if(viewModelRu.weather != nil)  {
+                        var cachedWeather = CachedWeather(weather: viewModelRu.weather ?? nil, weatherForHours: viewModelRu.weatherForHours ?? nil, weatherForWeeks: viewModelRu.weatherForWeek ?? nil, language: Language(rawValue: "ru")!, date: Date())
+                        self.cache.update(cachedWeather)
+                    }
+                    if(viewModelEn.weather != nil)  {
+                        var cachedWeather = CachedWeather(weather: viewModelEn.weather ?? nil, weatherForHours: viewModelEn.weatherForHours ?? nil, weatherForWeeks: viewModelEn.weatherForWeek ?? nil, language: Language(rawValue: "en")!, date: Date())
                         self.cache.update(cachedWeather)
                     }
                 }
@@ -162,14 +234,20 @@ struct ContentView: View {
                 }
           }receiveValue: { language in
               print(LocalizationService.shared.language)
-              viewModel.updateLanguage(language: LocalizationService.shared.language)
               
               Task{
-                  await viewModel.loadWeather(for:self.coordinates)
-                  await viewModel.loadWeatherForHours(for: self.coordinates)
-                  await viewModel.loadWeatherForWeek(for: self.coordinates)
-                  if(viewModel.weather != nil)  {
-                      var cachedWeather = CachedWeather(weather: viewModel.weather ?? nil, weatherForHours: viewModel.weatherForHours ?? nil, weatherForWeeks: viewModel.weatherForWeek ?? nil, date: Date())
+                  await viewModelRu.loadWeather(for:coordinates)
+                  await viewModelRu.loadWeatherForHours(for: self.coordinates)
+                  await viewModelRu.loadWeatherForWeek(for: self.coordinates)
+                  await viewModelEn.loadWeather(for:coordinates)
+                  await viewModelEn.loadWeatherForHours(for: self.coordinates)
+                  await viewModelEn.loadWeatherForWeek(for: self.coordinates)
+                  if(viewModelRu.weather != nil)  {
+                      var cachedWeather = CachedWeather(weather: viewModelRu.weather ?? nil, weatherForHours: viewModelRu.weatherForHours ?? nil, weatherForWeeks: viewModelRu.weatherForWeek ?? nil, language: Language(rawValue: "ru")!, date: Date())
+                      self.cache.update(cachedWeather)
+                  }
+                  if(viewModelEn.weather != nil)  {
+                      var cachedWeather = CachedWeather(weather: viewModelEn.weather ?? nil, weatherForHours: viewModelEn.weatherForHours ?? nil, weatherForWeeks: viewModelEn.weatherForWeek ?? nil, language: Language(rawValue: "en")!, date: Date())
                       self.cache.update(cachedWeather)
                   }
               }
