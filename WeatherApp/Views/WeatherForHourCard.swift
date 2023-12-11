@@ -16,16 +16,10 @@ struct WeatherForHourCard: View {
         VStack{
             Text(parseDate(unixTime: list.id, date: false))
 
-            AsyncImage(url:
-                        URL(string: "https://openweathermap.org/img/wn/\(list.weather[0].icon)@2x.png")!
-            ) { image in
-                image
+            getImageByDescription( list.weather[0].icon)
                     .resizable()
                     .scaledToFill()
-                    .frame(width: 50, height: 50)
-            } placeholder: {
-                ProgressView()
-            }
+                    .frame(width: 30, height: 30)
             if(language.rawValue == "ru") {
                 Text("\((String(format: "%.0f",list.main.temp)))°")
             }

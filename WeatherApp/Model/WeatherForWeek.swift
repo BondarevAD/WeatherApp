@@ -13,7 +13,7 @@ struct WelcomeForWeeks: Codable {
     let timezoneOffset: Int
     let current: Current?
     let minutely: [Minutely]
-    let hourly: [Current]
+    let hourly: [Current]?
     let daily: [Daily]
 //    let alerts: [Alert]
 
@@ -49,10 +49,7 @@ struct Current: Codable {
     let windDeg: Int
     let windGust: Double?
     let weather: [WeatherForWeeks]
-    let snow: Rain?
     let pop: Double?
-    let rain: Rain?
-
     enum CodingKeys: String, CodingKey {
         case dt, sunrise, sunset, temp
         case feelsLike = "feels_like"
@@ -62,7 +59,7 @@ struct Current: Codable {
         case windSpeed = "wind_speed"
         case windDeg = "wind_deg"
         case windGust = "wind_gust"
-        case weather, snow, pop, rain
+        case weather, pop
     }
 }
 

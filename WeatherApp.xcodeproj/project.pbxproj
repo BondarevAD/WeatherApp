@@ -12,6 +12,7 @@
 		CE0E4EB32B22035A001586DB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE0E4EB22B22035A001586DB /* Assets.xcassets */; };
 		CE0E4EB62B22035A001586DB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE0E4EB52B22035A001586DB /* Preview Assets.xcassets */; };
 		CE1373462B25E62900BB3B12 /* DateDiffrence.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1373452B25E62900BB3B12 /* DateDiffrence.swift */; };
+		CE1373482B27195B00BB3B12 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1373472B27195B00BB3B12 /* ImageService.swift */; };
 		CE7DD2C42B22127400585F32 /* DeviceLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7DD2C32B22127400585F32 /* DeviceLocationService.swift */; };
 		CE7DD2C72B221EBA00585F32 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CE7DD2C92B221EBA00585F32 /* Localizable.strings */; };
 		CE87D6942B24E70200F057F7 /* WeatherForHoursView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE87D6932B24E70200F057F7 /* WeatherForHoursView.swift */; };
@@ -45,6 +46,7 @@
 		CE0E4EB52B22035A001586DB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		CE0E4EC12B220712001586DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		CE1373452B25E62900BB3B12 /* DateDiffrence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateDiffrence.swift; sourceTree = "<group>"; };
+		CE1373472B27195B00BB3B12 /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
 		CE7DD2C32B22127400585F32 /* DeviceLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceLocationService.swift; sourceTree = "<group>"; };
 		CE7DD2C82B221EBA00585F32 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CE7DD2CA2B221EBD00585F32 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -177,6 +179,7 @@
 				CED3E9E12B2230A70010894E /* Language.swift */,
 				CE87D6992B24F34600F057F7 /* Cache.swift */,
 				CE1373452B25E62900BB3B12 /* DateDiffrence.swift */,
+				CE1373472B27195B00BB3B12 /* ImageService.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -305,6 +308,7 @@
 				CE7DD2C42B22127400585F32 /* DeviceLocationService.swift in Sources */,
 				CED3E9F72B233D940010894E /* WeatherForWeekCard.swift in Sources */,
 				CE87D6942B24E70200F057F7 /* WeatherForHoursView.swift in Sources */,
+				CE1373482B27195B00BB3B12 /* ImageService.swift in Sources */,
 				CED3E9FC2B2376EE0010894E /* NetworkMonitor.swift in Sources */,
 				CE87D6962B24E85700F057F7 /* WeatherForWeekView.swift in Sources */,
 				CED3E9EB2B223CAC0010894E /* WeatherViewModel.swift in Sources */,

@@ -15,16 +15,10 @@ struct SearchWeatherView: View {
     var body: some View {
         VStack{
             HStack{
-                AsyncImage(url:
-                            URL(string: "https://openweathermap.org/img/wn/\(weather.weather[0].icon)@2x.png")!
-                ) { image in
-                    image
+                getImageByDescription( weather.weather[0].icon)
                         .resizable()
                         .scaledToFill()
-                        .frame(width: 70, height: 70)
-                } placeholder: {
-                    ProgressView()
-                }
+                        .frame(width: 50, height: 50)
                 if(language.rawValue == "ru"){
                     Text("\(String(format: "%.0f", weather.main.temp))°")
                         .font(.system(size: 30))

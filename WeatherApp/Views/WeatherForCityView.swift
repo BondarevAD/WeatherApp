@@ -15,16 +15,10 @@ struct WeatherForCityView: View {
     var body: some View {
         
         HStack{
-            AsyncImage(url:
-                        URL(string: "https://openweathermap.org/img/wn/\(weather.weather[0].icon)@2x.png")!
-            ) { image in
-                image
+            getImageByDescription( weather.weather[0].icon)
                     .resizable()
                     .scaledToFill()
-                    .frame(width: 70, height: 70)
-            } placeholder: {
-                ProgressView()
-            }
+                    .frame(width: 50, height: 50)
             VStack{
                 Text(weather.name)
                     .font(.system(size: 50))

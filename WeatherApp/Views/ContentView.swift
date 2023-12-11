@@ -35,31 +35,35 @@ struct ContentView: View {
                     Text("no internet")
                 }
                 else {
-                    VStack{
-                        
-                        Text("\("no internet warning".localized(language)) \(getDateDiffrence(date: cache.cachedDataRu!.date)) \("ago".localized(language))")
-                        
-                        
-                        if(language.rawValue == "ru") {
-                            WeatherForCityView(weather: cache.cachedDataRu!.weather!, language: language)
+                    ScrollView(.vertical) {
+                        VStack{
                             
-                            WeatherForHoursView(weather: cache.cachedDataRu!.weatherForHours!, language: language)
+                            Text("\("no internet warning".localized(language)) \(getDateDiffrence(date: cache.cachedDataRu!.date)) \("ago".localized(language))")
+                                .foregroundColor(Color(.gray))
                             
-                            WeatherForWeekView(weather: cache.cachedDataRu!.weatherForWeeks!, language: language)
-                        }
-                        else {
-                            WeatherForCityView(weather: cache.cachedDataEn!.weather!, language: language)
                             
-                            WeatherForHoursView(weather: cache.cachedDataEn!.weatherForHours!, language: language)
-                            
-                            WeatherForWeekView(weather: cache.cachedDataEn!.weatherForWeeks!, language: language)
+                            if(language.rawValue == "ru") {
+                                WeatherForCityView(weather: cache.cachedDataRu!.weather!, language: language)
+                                
+                                WeatherForHoursView(weather: cache.cachedDataRu!.weatherForHours!, language: language)
+                                
+                                WeatherForWeekView(weather: cache.cachedDataRu!.weatherForWeeks!, language: language)
+                            }
+                            else {
+                                WeatherForCityView(weather: cache.cachedDataEn!.weather!, language: language)
+                                
+                                WeatherForHoursView(weather: cache.cachedDataEn!.weatherForHours!, language: language)
+                                
+                                WeatherForWeekView(weather: cache.cachedDataEn!.weatherForWeeks!, language: language)
+                            }
                         }
                     }
                 }
             }
             else {
                 if(viewModelRu.weather?.name == nil || viewModelRu.weatherForHours?.message == nil
-                   || viewModelRu.weatherForWeek?.timezone == nil
+                   || viewModelRu.weatherForWeek?.timezone == nil || viewModelEn.weather?.name == nil || viewModelEn.weatherForHours?.message == nil
+                   || viewModelEn.weatherForWeek?.timezone == nil
                 ) {
                     ProgressView()
                         .frame(

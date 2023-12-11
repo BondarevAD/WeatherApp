@@ -36,13 +36,11 @@ struct List: Codable, Identifiable {
     let pop: Double
     let sys: SysForHours
     let dtTxt: String
-    let rain, snow: Rain?
 
     enum CodingKeys: String, CodingKey {
         case main, weather, clouds, wind, visibility, pop, sys
         case dtTxt = "dt_txt"
         case id = "dt"
-        case rain, snow
     }
 }
 
@@ -66,13 +64,7 @@ struct MainClass: Codable{
 }
 
 // MARK: - Rain
-struct Rain: Codable {
-    let the3H: Double
 
-    enum CodingKeys: String, CodingKey {
-        case the3H = "3h"
-    }
-}
 
 // MARK: - Sys
 struct SysForHours: Codable {

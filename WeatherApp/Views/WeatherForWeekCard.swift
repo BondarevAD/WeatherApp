@@ -17,16 +17,12 @@ struct WeatherForWeekCard: View {
             Spacer()
             Text(parseDate(unixTime:weather!.id, date: true))
             Spacer()
-            AsyncImage(url:
-                        URL(string: "https://openweathermap.org/img/wn/\(weather?.weather[0].icon ?? "10d")@2x.png")!
-            ) { image in
-                image
+           
+            getImageByDescription( weather!.weather[0].icon)
                     .resizable()
                     .scaledToFill()
-                    .frame(width: 50, height: 50)
-            } placeholder: {
-                ProgressView()
-            }
+                    .frame(width: 30, height: 30)
+            
             Spacer()
             if(language.rawValue == "ru") {
                 Text("\(String(format: "%.0f",weather!.temp.day))°")

@@ -38,13 +38,11 @@ class Cache: ObservableObject {
             objectWillChange.send()
             self.cacheRu = cache
             save(cache.language)
-            print(cache)
         }
         else {
             objectWillChange.send()
             self.cacheEn = cache
             save(cache.language)
-            print(cache)
         }
     }
 

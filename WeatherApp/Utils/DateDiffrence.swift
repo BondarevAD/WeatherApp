@@ -29,7 +29,7 @@ func getDateDiffrence(date: Date) -> String {
     switch(hourNow - hour) {
     case 0:
         if(dateNowString == dateString) {
-            return "\(minutes - minutesNow)" + "m".localized(LocalizationService.shared.language)
+            return "\(minutesNow - minutes)" + "m".localized(LocalizationService.shared.language)
         }
         else {
             return ">1" + "d".localized(LocalizationService.shared.language)
@@ -42,7 +42,13 @@ func getDateDiffrence(date: Date) -> String {
             return "\(60 + minutesNow - minutes)" + "m".localized(LocalizationService.shared.language)
         }
     default:
-        return "\(hourNow - hour)" + "h".localized(LocalizationService.shared.language)
+        if(24 + hourNow  - hour >= 24) {
+            return "\(hourNow - hour)" + "h".localized(LocalizationService.shared.language)
+        }
+        else {
+            return "\(24 + hourNow - hour)" + "h".localized(LocalizationService.shared.language)
+
+        }
     }
 }
 extension Date {
